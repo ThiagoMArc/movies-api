@@ -18,8 +18,7 @@ public class DeleteMovieCommand : Notifiable<Notification>, ICommand
         AddNotifications(
             new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Id, "Id", "Id must be provided in order to delete a movie")
-                .IsNotEmpty(Id, "Id", "Id must be provided in order to delete a movie")
+                .IsNotNullOrWhiteSpace(Id, "Id", "Id must be provided in order to delete a movie")
         );
 
         if(!ObjectId.TryParse(Id, out _))

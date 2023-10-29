@@ -17,8 +17,7 @@ public class GetMovieByIdQuery : Notifiable<Notification>, IQuery
         AddNotifications(
             new Contract<Notification>()
                 .Requires()
-                .IsNotNull(Id, "Id", "Id must be provided in order to find movie")
-                .IsNotEmpty(Id, "Id", "Id must be provided in order to find movie")
+                .IsNotNullOrEmpty(Id, "Id", "Id must be provided in order to find movie")
         );
 
         if(!ObjectId.TryParse(Id, out _))

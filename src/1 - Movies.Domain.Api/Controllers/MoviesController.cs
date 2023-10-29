@@ -17,6 +17,21 @@ public class MoviesController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpPost(Name = "Creates a movie")]
+    [ProducesResponseType(statusCode: StatusCodes.Status201Created, type: typeof(GenericCommandResult))]
+    [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
+    public async Task<IActionResult> Create([FromBody] CreateMovieCommand request)
+    {
+        GenericCommandResult result = await _mediator.Send(request);
+
+        if (!result.Success)
+        {
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
+        }
+
+        return Created($"v1/characters", result?.Data);
+    }
+
     [HttpGet("{id}", Name = "Search a movie by id")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
@@ -26,7 +41,7 @@ public class MoviesController : ControllerBase
 
         if (!result.Success)
         {
-            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data: result.Message + " " + result?.Data)}");
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
         }
 
         return Ok(result?.Data);
@@ -41,7 +56,7 @@ public class MoviesController : ControllerBase
 
         if (!result.Success)
         {
-            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data: result.Message + " " + result?.Data)}");
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
         }
 
         return Ok(result?.Data);
