@@ -32,6 +32,21 @@ public class MoviesController : ControllerBase
         return Created($"v1/characters", result?.Data);
     }
 
+    [HttpPut(Name = "Update movie infos")]
+    [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericCommandResult))]
+    [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
+    public async Task<IActionResult> Update([FromBody] UpdateMovieCommand request)
+    {
+        GenericCommandResult result = await _mediator.Send(request);
+
+        if (!result.Success)
+        {
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
+        }
+
+        return Ok(result?.Data);
+    }
+
     [HttpGet("{id}", Name = "Search a movie by id")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
