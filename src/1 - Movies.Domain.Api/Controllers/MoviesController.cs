@@ -17,6 +17,35 @@ public class MoviesController : ControllerBase
         _mediator = mediator;
     }
 
+    [HttpGet("paged/{pageIndex}/{pageSize}", Name = "Search for movies and return paged results")]
+    [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
+    public async Task<IActionResult> GetCharactersPaged(int pageIndex, int pageSize)
+    {
+        GenericQueryResult result = await _mediator.Send(new GetMoviesQuery(pageIndex, pageSize));
+        
+        if(!result.Success)
+        {
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
+        }
+
+        return Ok(result.Data);
+    }
+
+    [HttpGet("{id}", Name = "Search a movie by id")]
+    [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
+    [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetById(string id)
+    {
+        GenericQueryResult result = await _mediator.Send(new GetMovieByIdQuery(id));
+
+        if (!result.Success)
+        {
+            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
+        }
+
+        return Ok(result?.Data);
+    }
+
     [HttpPost(Name = "Creates a movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status201Created, type: typeof(GenericCommandResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
@@ -38,21 +67,6 @@ public class MoviesController : ControllerBase
     public async Task<IActionResult> Update([FromBody] UpdateMovieCommand request)
     {
         GenericCommandResult result = await _mediator.Send(request);
-
-        if (!result.Success)
-        {
-            return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
-        }
-
-        return Ok(result?.Data);
-    }
-
-    [HttpGet("{id}", Name = "Search a movie by id")]
-    [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
-    [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetById(string id)
-    {
-        GenericQueryResult result = await _mediator.Send(new GetMovieByIdQuery(id));
 
         if (!result.Success)
         {
