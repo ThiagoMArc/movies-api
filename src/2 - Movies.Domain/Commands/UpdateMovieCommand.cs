@@ -1,5 +1,6 @@
 using Flunt.Notifications;
 using Flunt.Validations;
+using MongoDB.Bson;
 using Movies.Domain.Commands.Contracts;
 
 namespace Movies.Domain.Commands;
@@ -9,7 +10,7 @@ public class UpdateMovieCommand : Notifiable<Notification>, ICommand
                               int? releaseYear, string? director,
                               string? synopsis, Dictionary<string, string>? cast)
     {
-        Id = id;
+        Id = id ?? " ";
         Title = title;
         ReleaseYear = releaseYear;
         Director = director;
@@ -31,5 +32,8 @@ public class UpdateMovieCommand : Notifiable<Notification>, ICommand
                 .Requires()
                 .IsNotNullOrWhiteSpace(Id, "Id", "Id must be provided in order to update a movie")
         );
+
+        if(!ObjectId.TryParse(Id, out _))
+            AddNotification(nameof(Id), "Id must be a valid 24 digit hex string");
     }
 }

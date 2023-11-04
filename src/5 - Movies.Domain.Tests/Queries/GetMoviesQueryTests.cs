@@ -9,13 +9,13 @@ public class GetMoviesQueryTests
         //Arrange
         int pageIndex = 0;
         int pageSize = 5;
-        GetMoviesQuery moviesQuery = new(pageIndex, pageSize);
+        GetMoviesQuery query = new(pageIndex, pageSize);
 
         //Act 
-        moviesQuery.Validate();
+        query.Validate();
 
         //Assert
-        Assert.True(moviesQuery.IsValid);
+        Assert.True(query.IsValid);
     }
 
     [Theory]
@@ -25,13 +25,12 @@ public class GetMoviesQueryTests
     public void Should_Not_Be_Able_To_GetMovies_When_Query_Is_Invalid(int pageIndex, int pageSize)
     {
         //Arrange
-        GetMoviesQuery moviesQuery = new(pageIndex, pageSize);
+        GetMoviesQuery query = new(pageIndex, pageSize);
 
         //Act
-        moviesQuery.Validate();
+        query.Validate();
 
         //Assert
-        Assert.False(moviesQuery.IsValid);
+        Assert.False(query.IsValid);
     }
-
 }

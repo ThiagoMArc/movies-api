@@ -8,13 +8,13 @@ public class GetMovieByIdQueryTests
     {
         //Arrange
         string id = "6015F447A2C5EF4B2EED169F";
-        GetMovieByIdQuery movieQuery = new(id);
+        GetMovieByIdQuery query = new(id);
 
         //Act
-        movieQuery.Validate();
+        query.Validate();
 
         //Assert
-        Assert.True(movieQuery.IsValid);
+        Assert.True(query.IsValid);
     }
 
     [Theory]
@@ -24,12 +24,12 @@ public class GetMovieByIdQueryTests
     public void Should_Not_Be_Able_To_Get_A_Movie_When_Query_Is_Invalid(string id, bool expectedResult)
     {
         //Arrange
-        GetMovieByIdQuery movieQuery = new(id);
+        GetMovieByIdQuery query = new(id);
 
         //Act
-        movieQuery.Validate();
+        query.Validate();
 
         //Assert
-        Assert.Equal(movieQuery.IsValid, expectedResult);
+        Assert.Equal(query.IsValid, expectedResult);
     }
 }
