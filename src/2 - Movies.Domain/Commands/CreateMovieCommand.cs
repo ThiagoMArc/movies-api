@@ -33,7 +33,7 @@ public class CreateMovieCommand : Notifiable<Notification>, ICommand
                 .IsGreaterThan(ReleaseYear, 0, "ReleaseYear", "Movie release year must be greater than 0")
         );
 
-        if (!Cast.Any())
+        if (Cast is null || !Cast.Any())
         {
             AddNotification(nameof(Cast), "Movie cast must be provided");
         }
