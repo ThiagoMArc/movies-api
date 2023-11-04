@@ -3,7 +3,7 @@ using Movies.Domain.Queries;
 namespace Movies.Domain.Tests.Queries;
 public class GetMoviesQueryTests
 {
-    [Fact]
+    [Fact(DisplayName = "It should be able to get movies with valid query")]
     public void Should_GetMovies_When_Query_Is_Valid()
     {
         //Arrange
@@ -18,7 +18,7 @@ public class GetMoviesQueryTests
         Assert.True(query.IsValid);
     }
 
-    [Theory]
+    [Theory(DisplayName = "It should not be able to get movies with invalid query")]
     [InlineData(-1,5)]
     [InlineData(1,0)]
     [InlineData(-1,0)]

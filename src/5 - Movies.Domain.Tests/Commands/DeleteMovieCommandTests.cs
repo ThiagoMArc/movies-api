@@ -3,7 +3,7 @@ using Movies.Domain.Commands;
 namespace Movies.Domain.Tests.Commands;
 public class DeleteMovieCommandTests
 {
-    [Fact]
+    [Fact(DisplayName = "It should be able to delete a movie with a valid command")]
     public void Should_Be_Able_To_Delete_A_Movie_With_Valid_Command()
     {
         //Arrange
@@ -16,7 +16,7 @@ public class DeleteMovieCommandTests
         Assert.True(command.IsValid);
     }
 
-    [Theory]
+    [Theory(DisplayName = "It should not be able to delete a movie with invalid command")]
     [InlineData(" ")]
     [InlineData("123123255")]
     [InlineData(null)]

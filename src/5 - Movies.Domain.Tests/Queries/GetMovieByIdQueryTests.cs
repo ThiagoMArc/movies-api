@@ -3,7 +3,7 @@ using Movies.Domain.Queries;
 namespace Movies.Domain.Tests.Queries;
 public class GetMovieByIdQueryTests
 {
-    [Fact]
+    [Fact(DisplayName = "Validate returns true with valid query")]
     public void Should_Be_Able_To_Get_A_Movie_When_Valid_Id_Is_Provided()
     {
         //Arrange
@@ -17,7 +17,7 @@ public class GetMovieByIdQueryTests
         Assert.True(query.IsValid);
     }
 
-    [Theory]
+    [Theory(DisplayName = "Validate returns false with invalid query")]
     [InlineData("",false)]
     [InlineData(null, false)]
     [InlineData("1234", false)]

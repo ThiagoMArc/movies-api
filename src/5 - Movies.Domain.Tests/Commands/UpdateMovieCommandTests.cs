@@ -6,7 +6,7 @@ namespace Movies.Domain.Tests.Commands;
 public class UpdateMovieCommandTests
 {
 
-    [Fact]
+    [Fact(DisplayName = "It should be able to update movie infos with valid command")]
     public void Should_Be_Able_To_Update_Movie_Infos_With_Valid_Command()
     {
         //Arrange
@@ -22,7 +22,7 @@ public class UpdateMovieCommandTests
         Assert.True(command.IsValid);
     }
 
-    [Theory]
+    [Theory(DisplayName = "It should not be able to update movie infos with invalid command")]
     [InlineData(" ")]
     [InlineData(null)]
     [InlineData("12323434")]

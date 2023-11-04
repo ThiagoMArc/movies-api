@@ -3,7 +3,7 @@ using Movies.Domain.Commands;
 namespace Movies.Domain.Tests.Commands;
 public class CreateMovieCommandTests
 {
-    [Fact]
+    [Fact(DisplayName = "It should be able to register movie with valid command")]
     public void Should_Be_Able_To_Register_A_Movie_With_Valid_Command()
     {
         //Arrange
@@ -24,7 +24,7 @@ public class CreateMovieCommandTests
         Assert.True(command.IsValid);
     }
 
-    [Theory]
+    [Theory(DisplayName = "It should not be able to register movie with invalid command")]
     [MemberData(nameof(GetCreateInvalidConfigs))]
     public void Should_Not_Be_Able_To_Register_A_Movie_With_Invalid_Command(string movieTitle, 
                                                                             string director, 
