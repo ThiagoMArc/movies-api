@@ -22,7 +22,12 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c => 
 {
-    c.SwaggerDoc("v1", new OpenApiInfo(){Title = "Movies Api"});
+    c.SwaggerDoc("v1", new OpenApiInfo()
+                       {
+                        Title = "Movies Api",
+                        Description = "Movies Catalogue Api"
+                       }
+                );
 });
 
 builder.Services.AddMediatR(cfg => {
