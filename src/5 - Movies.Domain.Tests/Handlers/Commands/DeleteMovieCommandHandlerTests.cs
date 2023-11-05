@@ -10,7 +10,7 @@ public class DeleteMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new(); 
 
-    [Theory]
+    [Theory(DisplayName = "DeleteMovieCommandHandler should not be able to delete movie with invalid command")]
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
@@ -27,7 +27,7 @@ public class DeleteMovieCommandHandlerTests
         Assert.False(result.Success);
     }
 
-    [Fact]
+    [Fact(DisplayName = "DeleteMovieCommandHandler should not be able to dele to delete non existent movie")]
     public async Task DeleteMovieCommandHandler_Should_Not_Be_Able_To_Delete_Non_Existent_Movie()
     {
         //Arrange
@@ -42,8 +42,8 @@ public class DeleteMovieCommandHandlerTests
         Assert.False(result.Success);
     }
 
-    [Fact]
-    public async Task DeleteMovieCommandHandler_Should_Be_Able_To_Delete_An_Existent_Movie()
+    [Fact(DisplayName = "DeleteMovieCommandHandler should be able to delete a registered movie")]
+    public async Task DeleteMovieCommandHandler_Should_Be_Able_To_Delete_A_Registered_Movie()
     {
         //Arrange
         string id = "653ec34b4b6e63d9c724cbf2";
@@ -67,5 +67,4 @@ public class DeleteMovieCommandHandlerTests
         //Assert
         Assert.True(result.Success);
     }
-
 }

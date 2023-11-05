@@ -35,7 +35,7 @@ public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, Gen
 
         await _movieRepository.Create(movie);
 
-        return new GenericCommandResult(false, "Movie registed with success", movie?.Id);
+        return new GenericCommandResult(true, "Movie registed with success", movie?.Id);
     }
 
     private async Task<bool> MovieAlreadyExists(string title)
