@@ -6,9 +6,9 @@ using Movies.Domain.Queries.Contracts;
 namespace Movies.Domain.Queries;
 public class GetMovieByIdQuery : Notifiable<Notification>, IQuery
 {
-    public GetMovieByIdQuery(string id)
+    public GetMovieByIdQuery(string? id)
     {
-        Id = id;
+        Id = id ?? " ";
     }
     public string Id { get; set; }
 
@@ -17,7 +17,7 @@ public class GetMovieByIdQuery : Notifiable<Notification>, IQuery
         AddNotifications(
             new Contract<Notification>()
                 .Requires()
-                .IsNotNullOrEmpty(Id, "Id", "Id must be provided in order to find movie")
+                .IsNotNullOrWhiteSpace(Id, "Id", "Id must be provided in order to find movie")
         );
 
         if(!ObjectId.TryParse(Id, out _))
