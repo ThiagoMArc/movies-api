@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Infra.Context;
 using Movies.Domain.Infra.Repositories;
@@ -19,7 +20,10 @@ builder.Services.AddSingleton<AppDbContext>(serviceProvider =>
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c => 
+{
+    c.SwaggerDoc("v1", new OpenApiInfo(){Title = "Movies Api"});
+});
 
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(AppDomain.CurrentDomain.Load("Movies.Domain"));
