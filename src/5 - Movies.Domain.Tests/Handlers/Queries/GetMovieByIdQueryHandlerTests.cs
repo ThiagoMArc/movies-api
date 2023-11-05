@@ -32,7 +32,9 @@ public class GetMovieByIdQueryHandlerTests
     {
         //Arrange
         string nonExistentMovieId = "BFE129D91EA3E7BFA35BC6D1";
+        
         GetMovieByIdQuery request = new(nonExistentMovieId);
+        
         _movieRepository.Setup(m => m.GetById(nonExistentMovieId).Result).Returns((Movie)null);
 
         //Act
@@ -47,13 +49,17 @@ public class GetMovieByIdQueryHandlerTests
     {
         //Arrange
         string movieId = "46028E4CF3732AC81005F314";
+
         GetMovieByIdQuery request = new(movieId);
+        
         Dictionary<string, string> cast = new()
         {
             {"Micheal Keaton", "Batman"},
             {"Jack Nicholson", "Joker"}
         };
+        
         Movie movie = new("Batman", 1989, "Tim Burton", "Faces joker", cast);
+        
         _movieRepository.Setup(m => m.GetById(movieId).Result).Returns(movie);
 
         //Act

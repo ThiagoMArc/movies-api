@@ -32,6 +32,8 @@ public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand, Gen
             return new GenericCommandResult(false, "Can't delete non existent movie");
         }
 
+        await _movieRepository.Delete(request.Id);
+
         return new GenericCommandResult(true, "Movie successfully deleted");
     }
 }

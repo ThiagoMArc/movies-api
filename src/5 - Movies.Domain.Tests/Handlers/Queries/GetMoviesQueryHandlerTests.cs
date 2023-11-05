@@ -15,6 +15,7 @@ public class GetMoviesQueryHandlerTests
     {
         //Arrange
         GetMoviesQuery request = new(0, 5);
+        
         Dictionary<string, string> cast = new()
         {
             {"Micheal Keaton", "Batman"},
