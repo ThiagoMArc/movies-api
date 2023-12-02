@@ -17,7 +17,7 @@ public class MoviesController : ControllerBase
         _mediator = mediator;
     }
 
-    [HttpGet("paged/{pageIndex}/{pageSize}", Name = "Search for movies and return paged results")]
+    [HttpGet("{pageIndex}/{pageSize}", Name = "Search for movies and return paged results")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     public async Task<IActionResult> GetCharactersPaged(int pageIndex, int pageSize)
     {
