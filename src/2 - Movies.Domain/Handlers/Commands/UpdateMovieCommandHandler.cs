@@ -3,6 +3,7 @@ using Movies.Domain.Commands;
 using Movies.Domain.Entities;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
+using Movies.Domain.Services;
 using Movies.Domain.Utils;
 
 namespace Movies.Domain.Handlers.Commands;
@@ -10,10 +11,14 @@ namespace Movies.Domain.Handlers.Commands;
 public class UpdateMovieCommandHandler : IRequestHandler<UpdateMovieCommand, GenericCommandResult>
 {
     private readonly IMovieRepository _movieRepository;
+    private readonly ICache<Movie> _cache;
 
-    public UpdateMovieCommandHandler(IMovieRepository movieRepository)
+    public UpdateMovieCommandHandler(
+        IMovieRepository movieRepository, 
+        ICache<Movie>  cache)
     {
         _movieRepository = movieRepository;
+        _cache = cache;
     }
 
     public async Task<GenericCommandResult> Handle(UpdateMovieCommand request, CancellationToken cancellationToken)
@@ -32,10 +37,15 @@ public class UpdateMovieCommandHandler : IRequestHandler<UpdateMovieCommand, Gen
             return new GenericCommandResult(false, "Can't update non existent movie", request.Id);
         }
 
-        movie.UpdateMovieInfos(request.Title, request.Director, 
-                               request.Synopsis, request.ReleaseYear, request.Cast);
+        movie.UpdateMovieInfos(request.Title, 
+                               request.Director, 
+                               request.Synopsis, 
+                               request.ReleaseYear,
+                               request.Cast);
 
         await _movieRepository.Update(request.Id, movie);
+
+        await _cache.RemoveAsync(request.Id);
 
         return new GenericCommandResult(true, "Movies infos updated successfully", movie);
     }

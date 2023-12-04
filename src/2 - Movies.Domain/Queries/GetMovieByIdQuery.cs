@@ -1,5 +1,6 @@
 using Flunt.Notifications;
 using Flunt.Validations;
+using Microsoft.Extensions.Caching.Distributed;
 using MongoDB.Bson;
 using Movies.Domain.Queries.Contracts;
 

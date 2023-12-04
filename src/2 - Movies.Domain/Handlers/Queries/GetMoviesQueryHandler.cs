@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.Extensions.Caching.Distributed;
 using Movies.Domain.Entities;
 using Movies.Domain.Queries;
 using Movies.Domain.Repositories;
@@ -19,7 +20,7 @@ public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQuer
     {
         request.Validate();
 
-        if(!request.IsValid)
+        if (!request.IsValid)
         {
             return new GenericQueryResult(false, "", StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
         }
@@ -27,15 +28,15 @@ public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQuer
         IEnumerable<Movie> movies = await _movieRepository.GetAll();
         PagedList<Movie> moviesPaged = PagedList<Movie>.ToPagedList(movies.AsQueryable(), request.PageIndex, request.PageSize);
 
-        return new GenericQueryResult(true, 
-                                   "Movies successfully recovered", 
-                                   new 
+        return new GenericQueryResult(true,
+                                   "Movies successfully recovered",
+                                   new
                                    {
-                                      currentPage = moviesPaged.CurrentPage,
-                                      totalPages = moviesPaged.TotalPages,
-                                      pageSize = moviesPaged.PageSize,
-                                      totalCount = moviesPaged.TotalCount,
-                                      result = moviesPaged
+                                       currentPage = moviesPaged.CurrentPage,
+                                       totalPages = moviesPaged.TotalPages,
+                                       pageSize = moviesPaged.PageSize,
+                                       totalCount = moviesPaged.TotalCount,
+                                       result = moviesPaged
                                    });
 
     }

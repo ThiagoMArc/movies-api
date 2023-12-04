@@ -77,7 +77,7 @@ public class MoviesController : ControllerBase
     }
 
     [HttpDelete("{id}", Name = "Deletes a movie")]
-    [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
+    [ProducesResponseType(statusCode: StatusCodes.Status204NoContent, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
     public async Task<IActionResult> Delete(string id)
     {
@@ -88,7 +88,7 @@ public class MoviesController : ControllerBase
             return BadRequest($"{(string.IsNullOrEmpty(result?.Message) ? result?.Data : result.Message + " " + result?.Data)}");
         }
 
-        return Ok(result?.Data);
+        return NoContent();
     }
 
 }

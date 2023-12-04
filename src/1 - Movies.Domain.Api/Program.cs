@@ -1,12 +1,16 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Infra.Context;
 using Movies.Domain.Infra.Repositories;
 using Movies.Domain.Repositories;
+using Movies.Domain.Services;
 
 var builder = WebApplication.CreateBuilder(args);
+ConfigurationManager configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.Configure<DbSettings>(builder.Configuration.GetSection(nameof(DbSettings)));
@@ -35,6 +39,8 @@ builder.Services.AddMediatR(cfg => {
 });
 
 builder.Services.AddTransient<IMovieRepository, MovieRepository>();
+builder.Services.AddSingleton<IDistributedCache, RedisCache>();
+builder.Services.AddSingleton(typeof(ICache<>), typeof(DistributedCache<>));
 
 builder.Services.AddApiVersioning(options => 
 {
@@ -47,6 +53,8 @@ builder.Services.AddApiVersioning(options =>
     options.GroupNameFormat = "'v'VVV";
     options.SubstituteApiVersionInUrl = true;
 });
+
+builder.Services.AddStackExchangeRedisCache(options => { options.Configuration = configuration["RedisUrl"]; });
 
 var app = builder.Build();
 

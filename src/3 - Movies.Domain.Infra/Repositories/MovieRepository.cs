@@ -21,7 +21,7 @@ public class MovieRepository : IMovieRepository
 
     public async Task Delete(string id)
     {
-        await _context.Movies.DeleteOneAsync(id);
+        await _context.Movies.DeleteOneAsync(d => d.Id == id);
     }
 
     public async Task<IEnumerable<Movie>> GetAll()

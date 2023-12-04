@@ -1,14 +1,17 @@
+using Microsoft.Extensions.Caching.Distributed;
 using Moq;
 using Movies.Domain.Commands;
 using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Commands;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
+using Movies.Domain.Services;
 
 namespace Movies.Domain.Tests.Handlers.Commands;
 public class UpdateMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new();
+    private readonly Mock<ICache<Movie>> _cacheMock = new();
 
     [Theory(DisplayName = "UpdateMovieCommandHandler should not be able to update movie infos with invalid command")]
     [InlineData("")]
@@ -24,7 +27,7 @@ public class UpdateMovieCommandHandlerTests
                                          It.IsAny<Dictionary<string, string>>());
 
         //Act
-        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
@@ -46,7 +49,7 @@ public class UpdateMovieCommandHandlerTests
         _movieRepository.Setup(m => m.GetById(id).Result).Returns((Movie)null);
 
         //Act
-        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
@@ -86,8 +89,11 @@ public class UpdateMovieCommandHandlerTests
                                                           "He's back to save John and Sarah Connor", 
                                                           cast)))
                         .Returns(Task.CompletedTask);
+        
+        _cacheMock.Setup(s => s.RemoveAsync(It.IsAny<string>(), CancellationToken.None)).Returns(Task.CompletedTask);
+
         //Act
-        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.True(result.Success);

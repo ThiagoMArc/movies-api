@@ -12,4 +12,8 @@
     <PackageReference Include="flunt" Version="2.0.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\4 - Movies.Domain.CrossCutting\Movies.Domain.CrossCutting.csproj" />
+  </ItemGroup>
+
 </Project>

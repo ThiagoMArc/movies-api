@@ -4,11 +4,13 @@ using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Commands;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
+using Movies.Domain.Services;
 
 namespace Movies.Domain.Tests.Handlers.Commands;
 public class DeleteMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new(); 
+    private readonly Mock<ICache<Movie>> _cacheMock = new();
 
     [Theory(DisplayName = "DeleteMovieCommandHandler should not be able to delete movie with invalid command")]
     [InlineData(null)]
@@ -21,7 +23,7 @@ public class DeleteMovieCommandHandlerTests
         DeleteMovieCommand command = new(id);
 
         //Act
-        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
@@ -36,7 +38,7 @@ public class DeleteMovieCommandHandlerTests
         _movieRepository.Setup(m => m.GetById(id).Result).Returns((Movie)null);
 
         //Act
-        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
@@ -60,9 +62,10 @@ public class DeleteMovieCommandHandlerTests
         
         _movieRepository.Setup(m => m.GetById(id).Result).Returns(movie);
         _movieRepository.Setup(m => m.Delete(id)).Returns(Task.CompletedTask);
+        _cacheMock.Setup(s => s.RemoveAsync(It.IsAny<string>(), CancellationToken.None)).Returns(Task.CompletedTask);
 
         //Act
-        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
+        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
         Assert.True(result.Success);

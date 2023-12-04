@@ -4,11 +4,13 @@ using Movies.Domain.Handlers.Queries;
 using Movies.Domain.Queries;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
+using Movies.Domain.Services;
 
 namespace Movies.Domain.Tests.Handlers.Queries;
 public class GetMovieByIdQueryHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new();
+    private readonly Mock<ICache<Movie>> _cacheMock = new();
 
     [Theory(DisplayName = "GetMovieByIdQueryHandler should not be able to get a movie with invalid query")]
     [InlineData(null)]
@@ -19,9 +21,9 @@ public class GetMovieByIdQueryHandlerTests
     {   
         //Arrange
         GetMovieByIdQuery request = new(id);
-
+        
         //Act
-        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
+        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
@@ -35,22 +37,30 @@ public class GetMovieByIdQueryHandlerTests
         
         GetMovieByIdQuery request = new(nonExistentMovieId);
         
+        Movie? movie = null;
+        
+        _cacheMock.Setup(s => s.TryGetValue(It.IsAny<string>(), out movie)).Returns(false);
+
         _movieRepository.Setup(m => m.GetById(nonExistentMovieId).Result).Returns((Movie)null);
 
         //Act
-        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
+        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
         Assert.False(result.Success);
     }
 
     [Fact]
-    public async Task GetMovieByIdQueryHandler_Should_Be_Able_To_Return_A_Movie_When_Existent_Id_Is_Provided()
+    public async Task GetMovieByIdQueryHandler_Should_Be_Able_To_Return_A_Movie_From_Database()
     {
         //Arrange
         string movieId = "46028E4CF3732AC81005F314";
 
         GetMovieByIdQuery request = new(movieId);
+
+        Movie? movie = null;
+        
+        _cacheMock.Setup(s => s.TryGetValue(It.IsAny<string>(), out movie)).Returns(false);
         
         Dictionary<string, string> cast = new()
         {
@@ -58,12 +68,12 @@ public class GetMovieByIdQueryHandlerTests
             {"Jack Nicholson", "Joker"}
         };
         
-        Movie movie = new("Batman", 1989, "Tim Burton", "Faces joker", cast);
+        movie = new("Batman", 1989, "Tim Burton", "Faces joker", cast);
         
         _movieRepository.Setup(m => m.GetById(movieId).Result).Returns(movie);
 
         //Act
-        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
+        GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
         Assert.True(result.Success);

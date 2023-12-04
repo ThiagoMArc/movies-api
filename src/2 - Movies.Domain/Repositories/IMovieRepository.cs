@@ -1,3 +1,4 @@
+using MongoDB.Bson;
 using Movies.Domain.Entities;
 
 namespace Movies.Domain.Repositories;
