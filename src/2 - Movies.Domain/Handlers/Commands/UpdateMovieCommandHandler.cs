@@ -26,27 +26,27 @@ public class UpdateMovieCommandHandler : IRequestHandler<UpdateMovieCommand, Gen
         request.Validate();
 
         if(!request.IsValid)
-        {
-            return new GenericCommandResult(false, "", StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-        }
+            return new GenericCommandResult(success: false, 
+                                            status: System.Net.HttpStatusCode.BadRequest, 
+                                            data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
 
         Movie? movie = await _movieRepository.GetById(request.Id);
 
         if(movie is null)
-        {
-            return new GenericCommandResult(false, "Can't update non existent movie", request.Id);
-        }
+            return new GenericCommandResult(success: false, 
+                                            status: System.Net.HttpStatusCode.NotFound);
 
-        movie.UpdateMovieInfos(request.Title, 
-                               request.Director, 
-                               request.Synopsis, 
-                               request.ReleaseYear,
-                               request.Cast);
+        movie.UpdateMovieInfos(request?.Title, 
+                               request?.Director, 
+                               request?.Synopsis, 
+                               request?.ReleaseYear,
+                               request?.Cast);
 
         await _movieRepository.Update(request.Id, movie);
 
         await _cache.RemoveAsync(request.Id);
 
-        return new GenericCommandResult(true, "Movies infos updated successfully", movie);
+        return new GenericCommandResult(success: true, 
+                                        data: movie);
     }
 }

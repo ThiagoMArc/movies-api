@@ -26,20 +26,25 @@ public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, Gener
         request.Validate();
 
         if(!request.IsValid)
-            return new GenericQueryResult(false, "", StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
+            return new GenericQueryResult(success: false,
+                                          status: System.Net.HttpStatusCode.BadRequest, 
+                                          data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
         
         bool movieInCache = _cache.TryGetValue(request.Id, out var movie); 
 
         if(movieInCache)
-            return new GenericQueryResult(true, "Movie successfully found", movie);    
+            return new GenericQueryResult(success: true, 
+                                          data: movie);    
 
         movie = await _movieRepository.GetById(request.Id);
 
         if(movie is null)
-            return new GenericQueryResult(false, "There is no such movie with provided id", request.Id);
+            return new GenericQueryResult(success: false,
+                                          status: System.Net.HttpStatusCode.NotFound);
 
         await _cache.SetAsync(request.Id, movie, CacheSettings.Configs);
 
-        return new GenericQueryResult(true, "Movie successfully found", movie);
+        return new GenericQueryResult(success: true, 
+                                      data: movie);
     }
 }

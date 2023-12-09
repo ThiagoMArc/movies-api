@@ -1,6 +1,4 @@
 using MediatR;
-using Microsoft.Extensions.Caching.Distributed;
-using MongoDB.Bson;
 using Movies.Domain.Commands;
 using Movies.Domain.Entities;
 using Movies.Domain.Repositories;
@@ -28,21 +26,21 @@ public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand, Gen
         request.Validate();
 
         if(!request.IsValid)
-        {
-            return new GenericCommandResult(false, "", StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-        }
-
+            return new GenericCommandResult(success: false, 
+                                            status: System.Net.HttpStatusCode.BadRequest,
+                                            data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
+        
         Movie? movie = await _movieRepository.GetById(request.Id);
 
         if(movie is null)
-        {
-            return new GenericCommandResult(false, "Can't delete non existent movie");
-        }
+            return new GenericCommandResult(success: false,
+                                            status: System.Net.HttpStatusCode.NotFound);
 
         await _movieRepository.Delete(request.Id);
 
         await _cache.RemoveAsync(request.Id);
 
-        return new GenericCommandResult(true, "Movie successfully deleted");
+        return new GenericCommandResult(success:true,
+                                        status: System.Net.HttpStatusCode.NoContent);
     }
 }

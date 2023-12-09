@@ -20,22 +20,24 @@ public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, Gen
     {
         request.Validate();
 
-        if(!request.IsValid)
-        {
-            return new GenericCommandResult(false, "", StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-        }
+        if (!request.IsValid)
+            return new GenericCommandResult(success: false,
+                                            status: System.Net.HttpStatusCode.BadRequest,
+                                            data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
 
-        if(await MovieAlreadyExists(request.Title))
-        {
-            return new GenericCommandResult(false, "Movie with given title is already registered", request.Title);
-        }
+        if (await MovieAlreadyExists(request.Title))
+            return new GenericCommandResult(success: false,
+                                            status: System.Net.HttpStatusCode.BadRequest,
+                                           data: $"Movie with given title {request?.Title} is already registered");
 
-        Movie movie = new (request.Title, request.ReleaseYear, 
+
+        Movie movie = new(request.Title, request.ReleaseYear,
                           request.Director, request.Synopsis, request.Cast);
 
         await _movieRepository.Create(movie);
 
-        return new GenericCommandResult(true, "Movie registed with success", movie?.Id);
+        return new GenericCommandResult(success: true, 
+                                        data: movie);
     }
 
     private async Task<bool> MovieAlreadyExists(string title)
