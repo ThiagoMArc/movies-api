@@ -1,3 +1,5 @@
+using System.Net;
+using FluentAssertions;
 using Moq;
 using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Queries;
@@ -26,7 +28,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Status.Should().Be(HttpStatusCode.BadRequest);
+        result.Success.Should().BeFalse();
     }
 
     [Fact(DisplayName = "GetMovieByIdQueryHandler should not be able to get non existent movie")]
@@ -47,7 +50,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
+        result.Status.Should().Be(HttpStatusCode.NotFound);
     }
 
     [Fact]
@@ -76,6 +80,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        Assert.True(result.Success);
+        result.Success.Should().BeTrue();
+        result.Status.Should().Be(HttpStatusCode.OK);
+        result.Data.Should().NotBeNull();
     }
 }

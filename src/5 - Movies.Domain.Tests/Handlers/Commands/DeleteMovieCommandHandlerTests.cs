@@ -5,6 +5,7 @@ using Movies.Domain.Handlers.Commands;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Movies.Domain.Services;
+using FluentAssertions;
 
 namespace Movies.Domain.Tests.Handlers.Commands;
 public class DeleteMovieCommandHandlerTests
@@ -26,7 +27,8 @@ public class DeleteMovieCommandHandlerTests
         GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
+        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "DeleteMovieCommandHandler should not be able to dele to delete non existent movie")]
@@ -41,7 +43,8 @@ public class DeleteMovieCommandHandlerTests
         GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
+        result.Status.Should().Be(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact(DisplayName = "DeleteMovieCommandHandler should be able to delete a registered movie")]
@@ -68,6 +71,7 @@ public class DeleteMovieCommandHandlerTests
         GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.True(result.Success);
+        result.Success.Should().BeTrue();
+        result.Status.Should().Be(System.Net.HttpStatusCode.NoContent);
     }
 }

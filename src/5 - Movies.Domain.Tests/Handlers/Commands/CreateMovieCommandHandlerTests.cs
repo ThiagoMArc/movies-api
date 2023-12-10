@@ -4,6 +4,8 @@ using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Commands;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
+using FluentAssertions;
+
 
 namespace Movies.Domain.Tests.Handlers.Commands;
 public class CreateMovieCommandHandlerTests
@@ -14,13 +16,18 @@ public class CreateMovieCommandHandlerTests
     public async Task CreateMovieCommandHandler_Should_Not_Be_Able_To_Register_A_Movie_With_Invalid_Command()
     {
         //Arrange
-        CreateMovieCommand command = new("Halloween", 1978, "John Carpenter", " ", new Dictionary<string, string>());
+        CreateMovieCommand command = new("Halloween", 
+                                        1978, 
+                                        "John Carpenter", 
+                                        " ", 
+                                        []);
 
         //Act
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
+        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "CreateMovieCommandHandler should not be able to register an already registered movie")]
@@ -42,7 +49,8 @@ public class CreateMovieCommandHandlerTests
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.False(result.Success);
+        result.Success.Should().BeFalse();
+        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "CreateMovieCommandHandler should be able to register a movie")]
@@ -65,6 +73,8 @@ public class CreateMovieCommandHandlerTests
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        Assert.True(result.Success);
+        result.Success.Should().BeTrue();
+        result.Status.Should().Be(System.Net.HttpStatusCode.OK);
+        result.Data.Should().NotBeNull();
     }
 }
