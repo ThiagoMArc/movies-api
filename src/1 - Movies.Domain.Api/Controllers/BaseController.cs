@@ -12,7 +12,7 @@ public class BaseController : ControllerBase
             System.Net.HttpStatusCode.OK => Ok(result?.Data),
             System.Net.HttpStatusCode.Created => Created("", result?.Data),
             System.Net.HttpStatusCode.NoContent => NoContent(),
-            System.Net.HttpStatusCode.BadRequest => BadRequest(result?.Data),
+            System.Net.HttpStatusCode.BadRequest => BadRequest(result),
             System.Net.HttpStatusCode.NotFound => NotFound(),
             _ => Problem(statusCode: StatusCodes.Status500InternalServerError)
         };
