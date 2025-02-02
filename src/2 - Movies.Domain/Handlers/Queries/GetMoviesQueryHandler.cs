@@ -17,14 +17,6 @@ public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQuer
 
     public async Task<GenericQueryResult> Handle(GetMoviesQuery request, CancellationToken cancellationToken)
     {
-        request.Validate();
-
-        if (!request.IsValid)
-            return new GenericQueryResult(success: false,
-                                          status: System.Net.HttpStatusCode.BadRequest,
-                                          data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-
-
         IEnumerable<Movie> movies = await _movieRepository.GetAll();
         PagedList<Movie> moviesPaged = PagedList<Movie>.ToPagedList(movies.AsQueryable(), request.PageIndex, request.PageSize);
 

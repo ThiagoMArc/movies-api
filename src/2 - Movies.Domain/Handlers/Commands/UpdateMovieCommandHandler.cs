@@ -4,7 +4,6 @@ using Movies.Domain.Entities;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Movies.Domain.Services;
-using Movies.Domain.Utils;
 
 namespace Movies.Domain.Handlers.Commands;
 
@@ -23,13 +22,6 @@ public class UpdateMovieCommandHandler : IRequestHandler<UpdateMovieCommand, Gen
 
     public async Task<GenericCommandResult> Handle(UpdateMovieCommand request, CancellationToken cancellationToken)
     {
-        request.Validate();
-
-        if(!request.IsValid)
-            return new GenericCommandResult(success: false, 
-                                            status: System.Net.HttpStatusCode.BadRequest, 
-                                            data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-
         Movie? movie = await _movieRepository.GetById(request.Id);
 
         if(movie is null)

@@ -23,13 +23,6 @@ public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, Gener
     }
     public async Task<GenericQueryResult> Handle(GetMovieByIdQuery request, CancellationToken cancellationToken)
     {
-        request.Validate();
-
-        if(!request.IsValid)
-            return new GenericQueryResult(success: false,
-                                          status: System.Net.HttpStatusCode.BadRequest, 
-                                          data: StringFormat.ToString(request.Notifications.Select(m => m.Message).ToList()));
-        
         bool movieInCache = _cache.TryGetValue(request.Id, out var movie); 
 
         if(movieInCache)

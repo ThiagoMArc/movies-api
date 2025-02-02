@@ -1,11 +1,22 @@
+using FluentValidation;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Movies.Domain.Api.Behaviors;
+using Movies.Domain.Api.MIddlewares;
+using Movies.Domain.Commands;
+using Movies.Domain.Commands.CreateMovie;
+using Movies.Domain.Commands.DeleteMovie;
+using Movies.Domain.Commands.UpdateMovie;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Infra.Context;
 using Movies.Domain.Infra.Repositories;
+using Movies.Domain.Queries;
+using Movies.Domain.Queries.GetMovies;
+using Movies.Domain.Queries.GetMoviesById;
 using Movies.Domain.Repositories;
 using Movies.Domain.Services;
 
@@ -16,7 +27,9 @@ public static class DependencyInjectionConfig
     public static IServiceCollection ResolveDependencies(this WebApplicationBuilder builder)
     {
         ConfigureDatabase(builder);
+        ConfigureValidators(builder);
         ConfigureMediator(builder);
+        RegisterExceptionMiddleware(builder);
         ConfigureRedis(builder);
         ConfigureSwagger(builder);
         ConfigureApiVersioning(builder);
@@ -38,12 +51,30 @@ public static class DependencyInjectionConfig
         });
     }
 
+    private static void ConfigureValidators(WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<IValidator<GetMoviesQuery>, GetMoviesQueryValidator>();
+        builder.Services.AddTransient<IValidator<GetMovieByIdQuery>, GetMovieByIdValidator>();
+        builder.Services.AddTransient<IValidator<CreateMovieCommand>, CreateMovieCommandValidator>();
+        builder.Services.AddTransient<IValidator<UpdateMovieCommand>, updateMovieCommandValidator>();
+        builder.Services.AddTransient<IValidator<DeleteMovieCommand>, DeleteMovieCommandValidator>();
+    }
+
     private static void ConfigureMediator(WebApplicationBuilder builder)
     {
+        var domainAssembly = AppDomain.CurrentDomain.Load("Movies.Domain");
+        
         builder.Services.AddMediatR(cfg =>
         {
-            cfg.RegisterServicesFromAssembly(AppDomain.CurrentDomain.Load("Movies.Domain"));
+            cfg.RegisterServicesFromAssembly(domainAssembly);
         });
+
+        builder.Services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+    }
+
+    private static void RegisterExceptionMiddleware(WebApplicationBuilder builder)
+    {
+        builder.Services.AddTransient<ExceptionHandlingMiddleware>();
     }
 
     private static void ConfigureRedis(WebApplicationBuilder builder)
