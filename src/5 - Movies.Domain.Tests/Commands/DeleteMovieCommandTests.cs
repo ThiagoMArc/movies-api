@@ -1,4 +1,5 @@
 using Movies.Domain.Commands;
+using Shouldly;
 
 namespace Movies.Domain.Tests.Commands;
 public class DeleteMovieCommandTests
@@ -13,7 +14,7 @@ public class DeleteMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.True(command.IsValid);
+        command.IsValid.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "It should not be able to delete a movie with invalid command")]
@@ -29,6 +30,6 @@ public class DeleteMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.False(command.IsValid);
+        command.IsValid.ShouldBeFalse();
     }
 }

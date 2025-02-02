@@ -4,8 +4,7 @@ using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Commands;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
-using FluentAssertions;
-
+using Shouldly;
 
 namespace Movies.Domain.Tests.Handlers.Commands;
 public class CreateMovieCommandHandlerTests
@@ -26,8 +25,8 @@ public class CreateMovieCommandHandlerTests
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "CreateMovieCommandHandler should not be able to register an already registered movie")]
@@ -49,8 +48,8 @@ public class CreateMovieCommandHandlerTests
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "CreateMovieCommandHandler should be able to register a movie")]
@@ -73,8 +72,8 @@ public class CreateMovieCommandHandlerTests
         GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeTrue();
-        result.Status.Should().Be(System.Net.HttpStatusCode.OK);
-        result.Data.Should().NotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.OK);
+        result.Data.ShouldNotBeNull();
     }
 }

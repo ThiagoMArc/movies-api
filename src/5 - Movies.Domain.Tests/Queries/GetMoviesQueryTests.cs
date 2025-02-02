@@ -1,4 +1,5 @@
 using Movies.Domain.Queries;
+using Shouldly;
 
 namespace Movies.Domain.Tests.Queries;
 public class GetMoviesQueryTests
@@ -15,7 +16,7 @@ public class GetMoviesQueryTests
         query.Validate();
 
         //Assert
-        Assert.True(query.IsValid);
+        query.IsValid.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "It should not be able to get movies with invalid query")]
@@ -31,6 +32,6 @@ public class GetMoviesQueryTests
         query.Validate();
 
         //Assert
-        Assert.False(query.IsValid);
+        query.IsValid.ShouldBeFalse();
     }
 }

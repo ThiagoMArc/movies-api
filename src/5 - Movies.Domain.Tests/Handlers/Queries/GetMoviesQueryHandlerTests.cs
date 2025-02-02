@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Moq;
 using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Queries;
@@ -34,8 +34,8 @@ public class GetMoviesQueryHandlerTests
         GenericQueryResult result = await new GetMoviesQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeTrue();
-        result.Status.Should().Be(System.Net.HttpStatusCode.OK);
+        result.Success.ShouldBeTrue();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.OK);
     }
 
     [Theory(DisplayName = "GetMoviesQueryHandler can not return movies with invalid request")]
@@ -50,7 +50,7 @@ public class GetMoviesQueryHandlerTests
         GenericQueryResult result = await new GetMoviesQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
     }
 }
