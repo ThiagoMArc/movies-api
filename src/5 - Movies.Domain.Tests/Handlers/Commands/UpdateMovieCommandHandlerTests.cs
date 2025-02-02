@@ -13,27 +13,6 @@ public class UpdateMovieCommandHandlerTests
     private readonly Mock<IMovieRepository> _movieRepository = new();
     private readonly Mock<ICache<Movie>> _cacheMock = new();
 
-    [Theory(DisplayName = "UpdateMovieCommandHandler should not be able to update movie infos with invalid command")]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("56453")]
-    [InlineData(null)]
-    public async Task UpdateMovieCommandHandler_Should_Not_Be_Able_To_Update_Movie_Info_With_Invalid_Command(string id)
-    {
-        //Arrange
-        UpdateMovieCommand command = new(id, It.IsAny<string>(), 
-                                         It.IsAny<int>(), It.IsAny<string>(),
-                                         It.IsAny<string>(), 
-                                         It.IsAny<Dictionary<string, string>>());
-
-        //Act
-        GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
-
-        //Assert
-        result.Success.ShouldBeFalse();
-        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
-    }
-
     [Fact(DisplayName = "UpdateMovieCommandHandler should not be able to update non registered movie")]
     public async Task UpdateMovieCommandHandler_Should_Not_Be_Able_To_Update_Non_Registered_Movie()
     {

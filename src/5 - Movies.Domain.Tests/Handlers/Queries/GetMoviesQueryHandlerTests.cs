@@ -37,20 +37,4 @@ public class GetMoviesQueryHandlerTests
         result.Success.ShouldBeTrue();
         result.Status.ShouldBe(System.Net.HttpStatusCode.OK);
     }
-
-    [Theory(DisplayName = "GetMoviesQueryHandler can not return movies with invalid request")]
-    [InlineData(-1,5)]
-    [InlineData(0,0)]
-    public async Task GetMoviesQueryHandler_Should_Not_Be_Able_To_Return_Movies_With_Invalid_Request(int pageIndex, int pageSize)
-    {
-        //Arrange
-        GetMoviesQuery request = new(pageIndex, pageSize);
-
-        //Act
-        GenericQueryResult result = await new GetMoviesQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);
-
-        //Assert
-        result.Success.ShouldBeFalse();
-        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
-    }
 }

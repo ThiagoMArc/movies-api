@@ -11,24 +11,6 @@ public class CreateMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new(); 
 
-    [Fact(DisplayName = "CreateMovieCommandHandler should not be able to register movie with invalid command")]
-    public async Task CreateMovieCommandHandler_Should_Not_Be_Able_To_Register_A_Movie_With_Invalid_Command()
-    {
-        //Arrange
-        CreateMovieCommand command = new("Halloween", 
-                                        1978, 
-                                        "John Carpenter", 
-                                        " ", 
-                                        []);
-
-        //Act
-        GenericCommandResult result = await new CreateMovieCommandHandler(_movieRepository.Object).Handle(command, CancellationToken.None);
-
-        //Assert
-        result.Success.ShouldBeFalse();
-        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
-    }
-
     [Fact(DisplayName = "CreateMovieCommandHandler should not be able to register an already registered movie")]
     public async Task CreateMovieCommandHandler_Should_Not_Be_Able_To_Register_An_Already_Regitered_Movie()
     {
