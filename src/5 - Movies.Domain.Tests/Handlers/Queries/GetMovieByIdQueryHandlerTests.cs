@@ -1,5 +1,5 @@
 using System.Net;
-using FluentAssertions;
+using Shouldly;
 using Moq;
 using Movies.Domain.Entities;
 using Movies.Domain.Handlers.Queries;
@@ -28,8 +28,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Status.Should().Be(HttpStatusCode.BadRequest);
-        result.Success.Should().BeFalse();
+        result.Status.ShouldBe(HttpStatusCode.BadRequest);
+        result.Success.ShouldBeFalse();
     }
 
     [Fact(DisplayName = "GetMovieByIdQueryHandler should not be able to get non existent movie")]
@@ -50,8 +50,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(HttpStatusCode.NotFound);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(HttpStatusCode.NotFound);
     }
 
     [Fact(DisplayName = "GetMovieByIdQueryHandler should be able to return a movie from cache")]
@@ -78,9 +78,9 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeTrue();
-        result.Status.Should().Be(HttpStatusCode.OK);
-        result.Data.Should().NotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Status.ShouldBe(HttpStatusCode.OK);
+        result.Data.ShouldNotBeNull();
     }
 
     [Fact(DisplayName = "GetMovieByIdQueryHandler should be able to return a movie from database")]
@@ -109,8 +109,8 @@ public class GetMovieByIdQueryHandlerTests
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeTrue();
-        result.Status.Should().Be(HttpStatusCode.OK);
-        result.Data.Should().NotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Status.ShouldBe(HttpStatusCode.OK);
+        result.Data.ShouldNotBeNull();
     }
 }

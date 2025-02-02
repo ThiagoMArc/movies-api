@@ -1,4 +1,4 @@
-using FluentAssertions;
+using Shouldly;
 using Moq;
 using Movies.Domain.Commands;
 using Movies.Domain.Entities;
@@ -30,8 +30,8 @@ public class UpdateMovieCommandHandlerTests
         GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(System.Net.HttpStatusCode.BadRequest);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
     }
 
     [Fact(DisplayName = "UpdateMovieCommandHandler should not be able to update non registered movie")]
@@ -53,8 +53,8 @@ public class UpdateMovieCommandHandlerTests
         GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeFalse();
-        result.Status.Should().Be(System.Net.HttpStatusCode.NotFound);
+        result.Success.ShouldBeFalse();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.NotFound);
     }
 
     [Fact(DisplayName = "UpdateMovieCommandHandler should be able to update movies infos")]
@@ -98,8 +98,8 @@ public class UpdateMovieCommandHandlerTests
         GenericCommandResult result = await new UpdateMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
 
         //Assert
-        result.Success.Should().BeTrue();
-        result.Status.Should().Be(System.Net.HttpStatusCode.OK);
-        result.Data.Should().NotBeNull();
+        result.Success.ShouldBeTrue();
+        result.Status.ShouldBe(System.Net.HttpStatusCode.OK);
+        result.Data.ShouldNotBeNull();
     }
 }

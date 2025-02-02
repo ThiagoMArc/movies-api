@@ -1,4 +1,5 @@
 using Movies.Domain.Queries;
+using Shouldly;
 
 namespace Movies.Domain.Tests.Queries;
 public class GetMovieByIdQueryTests
@@ -14,14 +15,14 @@ public class GetMovieByIdQueryTests
         query.Validate();
 
         //Assert
-        Assert.True(query.IsValid);
+        query.IsValid.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "Validate returns false with invalid query")]
-    [InlineData("",false)]
-    [InlineData(null, false)]
-    [InlineData("1234", false)]
-    public void Should_Not_Be_Able_To_Get_A_Movie_When_Query_Is_Invalid(string id, bool expectedResult)
+    [InlineData("")]
+    [InlineData(null)]
+    [InlineData("1234")]
+    public void Should_Not_Be_Able_To_Get_A_Movie_When_Query_Is_Invalid(string id)
     {
         //Arrange
         GetMovieByIdQuery query = new(id);
@@ -30,6 +31,6 @@ public class GetMovieByIdQueryTests
         query.Validate();
 
         //Assert
-        Assert.Equal(query.IsValid, expectedResult);
+        query.IsValid.ShouldBeFalse();
     }
 }

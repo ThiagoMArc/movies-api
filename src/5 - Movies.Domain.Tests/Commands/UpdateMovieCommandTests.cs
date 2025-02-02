@@ -1,6 +1,7 @@
 
 using Moq;
 using Movies.Domain.Commands;
+using Shouldly;
 
 namespace Movies.Domain.Tests.Commands;
 public class UpdateMovieCommandTests
@@ -19,7 +20,7 @@ public class UpdateMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.True(command.IsValid);
+        command.IsValid.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "It should not be able to update movie infos with invalid command")]
@@ -38,6 +39,6 @@ public class UpdateMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.False(command.IsValid);
+        command.IsValid.ShouldBeFalse();
     }
 }

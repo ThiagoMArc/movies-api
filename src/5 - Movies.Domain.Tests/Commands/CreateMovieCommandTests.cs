@@ -1,4 +1,5 @@
 using Movies.Domain.Commands;
+using Shouldly;
 
 namespace Movies.Domain.Tests.Commands;
 public class CreateMovieCommandTests
@@ -21,11 +22,11 @@ public class CreateMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.True(command.IsValid);
+        command.IsValid.ShouldBeTrue();
     }
 
     [Theory(DisplayName = "It should not be able to register movie with invalid command")]
-    [MemberData(nameof(GetCreateInvalidConfigs))]
+    [MemberData(nameof(GetInvalidConfigs))]
     public void Should_Not_Be_Able_To_Register_A_Movie_With_Invalid_Command(string movieTitle, 
                                                                             string director, 
                                                                             string synopsis, 
@@ -40,10 +41,10 @@ public class CreateMovieCommandTests
         command.Validate();
 
         //Assert
-        Assert.False(command.IsValid);
+        command.IsValid.ShouldBeFalse();
     }
 
-    public static IEnumerable<object[]> GetCreateInvalidConfigs()
+    public static IEnumerable<object[]> GetInvalidConfigs()
     {
         var configs = new List<object[]>
             {
