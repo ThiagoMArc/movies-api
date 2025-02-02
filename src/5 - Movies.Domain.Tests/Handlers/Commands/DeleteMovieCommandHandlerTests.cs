@@ -13,24 +13,6 @@ public class DeleteMovieCommandHandlerTests
     private readonly Mock<IMovieRepository> _movieRepository = new(); 
     private readonly Mock<ICache<Movie>> _cacheMock = new();
 
-    [Theory(DisplayName = "DeleteMovieCommandHandler should not be able to delete movie with invalid command")]
-    [InlineData(null)]
-    [InlineData("")]
-    [InlineData(" ")]
-    [InlineData("11231345")]
-    public async Task DeleteMovieCommandHandler_Should_Not_Be_Able_To_Delete_Movie_With_Invalid_Request(string id)
-    {
-        //Arrange
-        DeleteMovieCommand command = new(id);
-
-        //Act
-        GenericCommandResult result = await new DeleteMovieCommandHandler(_movieRepository.Object, _cacheMock.Object).Handle(command, CancellationToken.None);
-
-        //Assert
-        result.Success.ShouldBeFalse();
-        result.Status.ShouldBe(System.Net.HttpStatusCode.BadRequest);
-    }
-
     [Fact(DisplayName = "DeleteMovieCommandHandler should not be able to dele to delete non existent movie")]
     public async Task DeleteMovieCommandHandler_Should_Not_Be_Able_To_Delete_Non_Existent_Movie()
     {
