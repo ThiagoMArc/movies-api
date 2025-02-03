@@ -6,7 +6,7 @@ public static class CacheSettings
 {
     private static readonly DistributedCacheEntryOptions distributedCacheEntryOptions = new()
     {
-        AbsoluteExpiration = DateTime.UtcNow.AddMinutes(1)
+        AbsoluteExpiration = DateTime.UtcNow.AddMinutes(15)
     };
     public static readonly DistributedCacheEntryOptions Configs = distributedCacheEntryOptions;
 }
