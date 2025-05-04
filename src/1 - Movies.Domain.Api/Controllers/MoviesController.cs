@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Domain.Commands;
 using Movies.Domain.Queries;
@@ -25,6 +26,7 @@ public class MoviesController : BaseController
         return GenerateResponse(await _mediator.Send(new GetMoviesQuery(pageIndex, pageSize)));
     }
 
+    [Authorize]
     [HttpGet("{id}", Name = "Search a movie by id")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(GenericQueryResult))]

@@ -19,6 +19,9 @@ using Movies.Domain.Queries.GetMovies;
 using Movies.Domain.Queries.GetMoviesById;
 using Movies.Domain.Repositories;
 using Movies.Domain.Services;
+using Keycloak.AuthServices.Authentication;
+using Keycloak.AuthServices.Authorization;
+using Keycloak.AuthServices.Sdk;
 
 namespace Movies.Domain.Api.Config;
 
@@ -26,6 +29,7 @@ public static class DependencyInjectionConfig
 {
     public static IServiceCollection ResolveDependencies(this WebApplicationBuilder builder)
     {
+        ConfigureAuthentication(builder);
         ConfigureDatabase(builder);
         ConfigureValidators(builder);
         ConfigureMediator(builder);
@@ -38,6 +42,19 @@ public static class DependencyInjectionConfig
         InjectCache(builder);
 
         return builder.Services;
+    }
+
+    private static void ConfigureAuthentication(WebApplicationBuilder builder)
+    {
+        builder.Services.AddKeycloakWebApiAuthentication(builder.Configuration);
+        builder.Services.AddKeycloakAuthorization(builder.Configuration);
+
+        var adminClientOptions = builder
+                            .Configuration
+                            .GetSection(KeycloakAdminClientOptions.Section)
+                            .Get<KeycloakAdminClientOptions>();
+
+        builder.Services.AddKeycloakAdminHttpClient(adminClientOptions);
     }
 
     private static void ConfigureDatabase(WebApplicationBuilder builder)
@@ -63,7 +80,7 @@ public static class DependencyInjectionConfig
     private static void ConfigureMediator(WebApplicationBuilder builder)
     {
         var domainAssembly = AppDomain.CurrentDomain.Load("Movies.Domain");
-        
+
         builder.Services.AddMediatR(cfg =>
         {
             cfg.RegisterServicesFromAssembly(domainAssembly);
