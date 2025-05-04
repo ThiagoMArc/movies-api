@@ -1,4 +1,5 @@
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Movies.Domain.Commands;
 using Movies.Domain.Queries;
@@ -34,6 +35,7 @@ public class MoviesController : BaseController
         return GenerateResponse(await _mediator.Send(new GetMovieByIdQuery(id)));
     }
 
+    [Authorize]
     [HttpPost(Name = "Creates a movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status201Created, type: typeof(GenericCommandResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
@@ -42,6 +44,7 @@ public class MoviesController : BaseController
         return GenerateResponse(await _mediator.Send(request));
     }
 
+    [Authorize]
     [HttpPut(Name = "Update movie infos")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericCommandResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
@@ -50,6 +53,7 @@ public class MoviesController : BaseController
         return GenerateResponse(await _mediator.Send(request));
     }
 
+    [Authorize]
     [HttpDelete("{id}", Name = "Deletes a movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status204NoContent, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
