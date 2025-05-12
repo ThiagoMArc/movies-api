@@ -28,4 +28,4 @@ FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS runtime
 WORKDIR /app
 
 COPY --from=build ["/app/1 - Movies.Domain.Api/out", "./"]
-ENTRYPOINT ["dotnet", "Movies.dll"]
+ENTRYPOINT ["dotnet", "Movies.Domain.Api.dll"]
