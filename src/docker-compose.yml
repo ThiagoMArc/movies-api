@@ -1,0 +1,75 @@
+services:
+  moviesapi:
+    image: movies-api:v3
+    build: .
+    container_name: mvsapi
+    ports:
+      - 5000:8080
+      - 50001:8081
+    networks:
+      - mvnetwork
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development 
+      - "DbSettings:ConnectionString=mongodb://mvmongo:27017"
+    depends_on:
+      mongo:
+        condition: service_started
+      redis:
+        condition: service_started
+      keycloak:
+        condition: service_started
+
+  mongo:
+    image: mongo:latest
+    container_name: mvmongo
+    ports:
+      - 27017:27017
+    networks:
+      - mvnetwork
+    volumes:
+      - mongo:/data/db
+  redis:
+    image: redis/redis-stack:latest
+    container_name: mvredis
+    ports:
+      - 10001:6379
+      - 13333:8001
+    networks:
+      - mvnetwork
+    volumes:
+      - redis:/dataredis/db
+  keycloak:
+    image: quay.io/keycloak/keycloak:20.0.2
+    container_name: mvkeycloak
+    environment:
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 7080
+      KC_HOSTNAME_STRICT_BACKCHANNEL: "true"
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HEALTH_ENABLED: "true"
+      KC_LOG_LEVEL: info
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
+      interval: 15s
+      timeout: 2s
+      retries: 15
+    command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm"]
+    volumes:
+      - ../keycloak/realm-export.json:/opt/keycloak/data/import/realm-export.json
+    ports:
+      - "7080:7080"
+      - "7443:7443"
+    networks:
+      - mvnetwork
+
+networks:
+  mvnetwork:
+    driver: bridge
+    name: mv_network
+  
+volumes:
+  mongo:
+    driver: local
+  redis:
+    driver: local
