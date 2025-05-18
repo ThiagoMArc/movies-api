@@ -12,18 +12,23 @@ services:
       - ASPNETCORE_ENVIRONMENT=Development 
       - "DbSettings:ConnectionString=mongodb://mvmongo:27017"
     depends_on:
-      mongo:
-        condition: service_started
-      redis:
-        condition: service_started
       keycloak:
         condition: service_started
+      mongo:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
   mongo:
     image: mongo:latest
     container_name: mvmongo
     ports:
       - 27017:27017
+    healthcheck:
+      test: ["CMD","mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 10s
+      timeout: 10s
+      retries: 5
     networks:
       - mvnetwork
     volumes:
@@ -34,6 +39,11 @@ services:
     ports:
       - 10001:6379
       - 13333:8001
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
     networks:
       - mvnetwork
     volumes:
@@ -51,8 +61,8 @@ services:
       KC_LOG_LEVEL: info
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:7080/health/ready"]
-      interval: 15s
-      timeout: 2s
+      interval: 30s
+      timeout: 10s
       retries: 15
     command: ["start-dev", "--http-port", "7080", "--https-port", "7443", "--import-realm"]
     volumes:
