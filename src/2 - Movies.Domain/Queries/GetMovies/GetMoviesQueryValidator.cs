@@ -1,4 +1,5 @@
 using FluentValidation;
+using Movies.Domain.CrossCutting.Shared;
 
 namespace Movies.Domain.Queries.GetMovies;
 public class GetMoviesQueryValidator : AbstractValidator<GetMoviesQuery>
@@ -7,10 +8,10 @@ public class GetMoviesQueryValidator : AbstractValidator<GetMoviesQuery>
     {
         RuleFor(x => x.PageIndex)
         .GreaterThan(0)
-        .WithMessage("Page index must be at least 1");   
+        .WithMessage(Constants.PAGE_MINIMUM_INDEX);   
 
         RuleFor(x => x.PageSize)
         .GreaterThan(0)
-        .WithMessage("Page size must have a minimum size of 1");
+        .WithMessage(Constants.PAGE_MINIMUM_SIZE);
     }
 }

@@ -18,7 +18,7 @@ public class MoviesController : BaseController
         _mediator = mediator;
     }
 
-    [HttpGet("{pageIndex}/{pageSize}", Name = "Search for movies and return paged results")]
+    [HttpGet("{pageIndex}/{pageSize}", Name = "Get Movies")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(GenericQueryResult))]
     public async Task<IActionResult> GetCharactersPaged(int pageIndex, int pageSize)
@@ -26,7 +26,7 @@ public class MoviesController : BaseController
         return GenerateResponse(await _mediator.Send(new GetMoviesQuery(pageIndex, pageSize)));
     }
 
-    [HttpGet("{id}", Name = "Search a movie by id")]
+    [HttpGet("{id}", Name = "Get Movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status404NotFound, type: typeof(GenericQueryResult))]
@@ -36,7 +36,7 @@ public class MoviesController : BaseController
     }
 
     [Authorize]
-    [HttpPost(Name = "Creates a movie")]
+    [HttpPost(Name = "Register Movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status201Created, type: typeof(GenericCommandResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
     public async Task<IActionResult> Create([FromBody] CreateMovieCommand request)
@@ -45,7 +45,7 @@ public class MoviesController : BaseController
     }
 
     [Authorize]
-    [HttpPut(Name = "Update movie infos")]
+    [HttpPut(Name = "Update Movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status200OK, type: typeof(GenericCommandResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
     public async Task<IActionResult> Update([FromBody] UpdateMovieCommand request)
@@ -54,7 +54,7 @@ public class MoviesController : BaseController
     }
 
     [Authorize]
-    [HttpDelete("{id}", Name = "Deletes a movie")]
+    [HttpDelete("{id}", Name = "Delete Movie")]
     [ProducesResponseType(statusCode: StatusCodes.Status204NoContent, type: typeof(GenericQueryResult))]
     [ProducesResponseType(statusCode: StatusCodes.Status400BadRequest, type: typeof(string))]
     public async Task<IActionResult> Delete(string id)

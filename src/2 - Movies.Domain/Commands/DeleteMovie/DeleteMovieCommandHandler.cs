@@ -1,4 +1,5 @@
 using MediatR;
+using MongoDB.Bson;
 using Movies.Domain.Commands;
 using Movies.Domain.Entities;
 using Movies.Domain.Repositories;
@@ -22,11 +23,17 @@ public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand, Gen
     
     public async Task<GenericCommandResult> Handle(DeleteMovieCommand request, CancellationToken cancellationToken)
     {
+        if(!ObjectId.TryParse(request.Id, out _))
+            return new GenericCommandResult(success: false,
+                                            status: System.Net.HttpStatusCode.NotFound,
+                                            data: $"Movie with id: {request?.Id} not found");
+
         Movie? movie = await _movieRepository.GetById(request.Id);
 
         if(movie is null)
             return new GenericCommandResult(success: false,
-                                            status: System.Net.HttpStatusCode.NotFound);
+                                            status: System.Net.HttpStatusCode.NotFound,
+                                            data: $"Movie with id: {request?.Id} not found");
 
         await _movieRepository.Delete(request.Id);
 

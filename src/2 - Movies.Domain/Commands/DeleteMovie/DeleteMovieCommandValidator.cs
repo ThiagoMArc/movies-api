@@ -1,5 +1,5 @@
-using MongoDB.Bson;
 using FluentValidation;
+using Movies.Domain.CrossCutting.Shared;
 
 namespace Movies.Domain.Commands.DeleteMovie;
 
@@ -9,8 +9,6 @@ public class DeleteMovieCommandValidator : AbstractValidator<DeleteMovieCommand>
     {
         RuleFor(x => x.Id)
             .NotEmpty()
-            .WithMessage("Id must be provided in order to delete a movie")
-            .Must(id => ObjectId.TryParse(id, out _))
-            .WithMessage("Id must be a valid 24 digit hex string");
+            .WithMessage(Constants.ID_MUST_BE_PROVIDED);
     }
 }

@@ -1,4 +1,5 @@
 using MediatR;
+using MongoDB.Bson;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Entities;
 using Movies.Domain.Queries;
@@ -22,6 +23,11 @@ public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, Gener
     }
     public async Task<GenericQueryResult> Handle(GetMovieByIdQuery request, CancellationToken cancellationToken)
     {
+        if(!ObjectId.TryParse(request.Id, out _))
+            return new GenericQueryResult(success: false,
+                                          status: System.Net.HttpStatusCode.NotFound,
+                                          data: $"Movie with id: {request?.Id} not found");
+                                            
         bool movieInCache = _cache.TryGetValue(request.Id, out var movie);
 
         if (movieInCache)
@@ -40,7 +46,8 @@ public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, Gener
 
         if (movie is null)
             return new GenericQueryResult(success: false,
-                                          status: System.Net.HttpStatusCode.NotFound);
+                                          status: System.Net.HttpStatusCode.NotFound,
+                                          data: $"Movie with id: {request?.Id} not found");
 
         await _cache.SetAsync(request.Id, movie, CacheSettings.Configs);
 
