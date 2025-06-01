@@ -10,5 +10,5 @@ public interface IMovieRepository
     Task Delete(string id);
     Task<Movie> GetById(string id);
     Task<Movie> GetByTitle(string title);
-    Task<IEnumerable<Movie>> GetAll();
+    Task<IEnumerable<Movie>> GetPagedData(int pageNumber, int pageSize);
 }

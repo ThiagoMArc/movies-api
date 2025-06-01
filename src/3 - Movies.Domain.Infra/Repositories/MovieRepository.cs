@@ -24,9 +24,12 @@ public class MovieRepository : IMovieRepository
         await _context.Movies.DeleteOneAsync(d => d.Id == id);
     }
 
-    public async Task<IEnumerable<Movie>> GetAll()
+    public async Task<IEnumerable<Movie>> GetPagedData(int pageNumber, int pageSize)
     {
-        return await _context.Movies.Find(_ => true).ToListAsync();
+        return await _context.Movies.Find(_ => true)
+                                    .Skip((pageNumber - 1) * pageSize)
+                                    .Limit(pageSize)
+                                    .ToListAsync();
     }
 
     public async Task<Movie> GetById(string id)
