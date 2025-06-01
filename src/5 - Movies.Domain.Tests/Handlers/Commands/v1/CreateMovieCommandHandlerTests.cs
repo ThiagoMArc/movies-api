@@ -1,12 +1,12 @@
 using Moq;
-using Movies.Domain.Commands;
+using Movies.Domain.Commands.v1.CreateMovie;
 using Movies.Domain.Entities;
-using Movies.Domain.Handlers.Commands;
+using Movies.Domain.Handlers.Commands.v1.CreateMovie;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Shouldly;
 
-namespace Movies.Domain.Tests.Handlers.Commands;
+namespace Movies.Domain.Tests.Handlers.Commands.v1;
 public class CreateMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new(); 

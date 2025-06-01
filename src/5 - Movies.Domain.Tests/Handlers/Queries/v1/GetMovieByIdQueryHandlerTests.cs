@@ -2,13 +2,13 @@ using System.Net;
 using Shouldly;
 using Moq;
 using Movies.Domain.Entities;
-using Movies.Domain.Handlers.Queries;
-using Movies.Domain.Queries;
+using Movies.Domain.Handlers.Queries.v1.GetMoviesById;
+using Movies.Domain.Queries.v1.GetMoviesById;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Movies.Domain.Services;
 
-namespace Movies.Domain.Tests.Handlers.Queries;
+namespace Movies.Domain.Tests.Handlers.Queries.v1;
 public class GetMovieByIdQueryHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new();

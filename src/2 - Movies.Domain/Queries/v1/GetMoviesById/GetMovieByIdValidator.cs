@@ -1,7 +1,7 @@
 using FluentValidation;
 using Movies.Domain.CrossCutting.Shared;
 
-namespace Movies.Domain.Queries.GetMoviesById;
+namespace Movies.Domain.Queries.v1.GetMoviesById;
 
 public class GetMovieByIdValidator : AbstractValidator<GetMovieByIdQuery>
 {

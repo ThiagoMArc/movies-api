@@ -1,14 +1,14 @@
 using MediatR;
-using MongoDB.Bson;
+using Movies.Domain.Commands.Helpers;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Entities;
-using Movies.Domain.Queries;
+using Movies.Domain.Queries.v1.GetMoviesById;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Movies.Domain.Services;
 
 
-namespace Movies.Domain.Handlers.Queries;
+namespace Movies.Domain.Handlers.Queries.v1.GetMoviesById;
 public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, GenericQueryResult>
 {
     private readonly IMovieRepository _movieRepository;
@@ -23,7 +23,7 @@ public class GetMovieByIdQueryHandler : IRequestHandler<GetMovieByIdQuery, Gener
     }
     public async Task<GenericQueryResult> Handle(GetMovieByIdQuery request, CancellationToken cancellationToken)
     {
-        if(!ObjectId.TryParse(request.Id, out _))
+        if(!DomainHelper.MovieExists(request.Id))
             return new GenericQueryResult(success: false,
                                           status: System.Net.HttpStatusCode.NotFound,
                                           data: $"Movie with id: {request?.Id} not found");

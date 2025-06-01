@@ -1,8 +1,11 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Movies.Domain.Commands;
-using Movies.Domain.Queries;
+using Movies.Domain.Commands.v1.CreateMovie;
+using Movies.Domain.Commands.v1.DeleteMovie;
+using Movies.Domain.Commands.v1.UpdateMovie;
+using Movies.Domain.Queries.v1.GetMovies;
+using Movies.Domain.Queries.v1.GetMoviesById;
 using Movies.Domain.Results;
 
 namespace Movies.Domain.Api.Controllers;

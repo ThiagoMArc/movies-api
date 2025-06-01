@@ -1,12 +1,12 @@
 using Shouldly;
 using Moq;
 using Movies.Domain.Entities;
-using Movies.Domain.Handlers.Queries;
-using Movies.Domain.Queries;
+using Movies.Domain.Handlers.Queries.v1.GetMovies;
+using Movies.Domain.Queries.v1.GetMovies;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 
-namespace Movies.Domain.Tests.Handlers.Queries;
+namespace Movies.Domain.Tests.Handlers.Queries.v1;
 public class GetMoviesQueryHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new();
@@ -28,7 +28,7 @@ public class GetMoviesQueryHandlerTests
             new("Batman", 1989, "Tim Burton", "Face joker", cast)
         };
 
-        _movieRepository.Setup(m => m.GetAll().Result).Returns(movies);
+        _movieRepository.Setup(m => m.GetPagedData(request.PageIndex, request.PageSize).Result).Returns(movies);
 
         //Act
         GenericQueryResult result = await new GetMoviesQueryHandler(_movieRepository.Object).Handle(request, CancellationToken.None);

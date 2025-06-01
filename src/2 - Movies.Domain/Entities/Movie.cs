@@ -16,7 +16,7 @@ public class Movie
 
     [BsonId]
     [BsonRepresentation(BsonType.ObjectId)]
-    public string Id {get ; private set;}
+    public string Id { get; private set; } = default!;
 
     [BsonElement("title")]
     public string Title { get; private set; }
@@ -37,13 +37,13 @@ public class Movie
                                  string synopsis, int? releaseYear,
                                  Dictionary<string, string>? cast)
     {
-        if(!string.IsNullOrEmpty(title) && !string.IsNullOrWhiteSpace(title))
+        if(!string.IsNullOrWhiteSpace(title))
             Title = title;
 
-        if(!string.IsNullOrEmpty(director) && !string.IsNullOrWhiteSpace(director))
+        if(!string.IsNullOrWhiteSpace(director))
             Director = director;
 
-        if(!string.IsNullOrEmpty(synopsis) && !string.IsNullOrWhiteSpace(synopsis))
+        if(!string.IsNullOrWhiteSpace(synopsis))
             Synopsis = synopsis;
 
         if(releaseYear is not null)

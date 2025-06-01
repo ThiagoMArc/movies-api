@@ -6,7 +6,7 @@ namespace Movies.Domain.Repositories;
 public interface IMovieRepository
 {
     Task Create(Movie movie);
-    Task Update(string id, Movie movie);
+    Task Update(Movie movie);
     Task Delete(string id);
     Task<Movie> GetById(string id);
     Task<Movie> GetByTitle(string title);

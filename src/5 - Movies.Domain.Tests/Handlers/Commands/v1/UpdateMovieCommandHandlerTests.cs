@@ -1,13 +1,14 @@
 using Shouldly;
 using Moq;
-using Movies.Domain.Commands;
+using Movies.Domain.Commands.v1.UpdateMovie;
 using Movies.Domain.Entities;
-using Movies.Domain.Handlers.Commands;
+using Movies.Domain.Handlers.Commands.v1.UpdateMovie;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 using Movies.Domain.Services;
 
-namespace Movies.Domain.Tests.Handlers.Commands;
+namespace Movies.Domain.Tests.Handlers.Commands.v1;
+
 public class UpdateMovieCommandHandlerTests
 {
     private readonly Mock<IMovieRepository> _movieRepository = new();
@@ -19,12 +20,12 @@ public class UpdateMovieCommandHandlerTests
         //Arrange
         string id = "DB5E92267528BB9C59EF423B";
 
-        UpdateMovieCommand command = new(id, 
-                                         "Terminator 78", 
-                                         2078, 
+        UpdateMovieCommand command = new(id,
+                                         "Terminator 78",
+                                         2078,
                                          "James Cameron III",
-                                         "He's back again", 
-                                         new Dictionary<string, string>(){{"Benson John", "T1908"}});
+                                         "He's back again",
+                                         new Dictionary<string, string>() { { "Benson John", "T1908" } });
 
         _movieRepository.Setup(m => m.GetById(id).Result).Returns((Movie)null);
 
@@ -47,30 +48,31 @@ public class UpdateMovieCommandHandlerTests
             {"Arnold", "T800"}
         };
 
-        UpdateMovieCommand command = new(id, 
-                                         "Terminator 2", 
-                                         1991, 
+        UpdateMovieCommand command = new(id,
+                                         "Terminator 2",
+                                         1991,
                                          "James Cameron",
-                                         "He's back to save John and Sarah Connor", 
+                                         "He's back to save John and Sarah Connor",
                                          cast);
 
         _movieRepository.Setup(m => m.GetById(id).Result)
-                        .Returns(new Movie( 
-                                        "Terminator 2", 
-                                            1992, 
+                        .Returns(new Movie(
+                                        "Terminator 2",
+                                            1992,
                                         "James Cameron",
-                                        "He's back to save John and Sarah Connor", 
+                                        "He's back to save John and Sarah Connor",
                                         cast
                                         )
                                 );
 
-        _movieRepository.Setup(m => m.Update(id, new Movie("Terminator 2", 
-                                                           1991, 
+        _movieRepository.Setup(m => m.Update(new Movie(
+                                                          "Terminator 2",
+                                                           1991,
                                                           "James Cameron",
-                                                          "He's back to save John and Sarah Connor", 
+                                                          "He's back to save John and Sarah Connor",
                                                           cast)))
                         .Returns(Task.CompletedTask);
-        
+
         _cacheMock.Setup(s => s.RemoveAsync(It.IsAny<string>(), CancellationToken.None)).Returns(Task.CompletedTask);
 
         //Act

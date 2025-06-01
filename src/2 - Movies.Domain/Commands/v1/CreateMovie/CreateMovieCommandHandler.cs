@@ -1,10 +1,10 @@
 using MediatR;
-using Movies.Domain.Commands;
+using Movies.Domain.Commands.v1.CreateMovie;
 using Movies.Domain.Entities;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 
-namespace Movies.Domain.Handlers.Commands;
+namespace Movies.Domain.Handlers.Commands.v1.CreateMovie;
 
 public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, GenericCommandResult>
 {

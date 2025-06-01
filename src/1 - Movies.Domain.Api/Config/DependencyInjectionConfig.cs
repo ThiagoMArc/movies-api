@@ -7,21 +7,21 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Movies.Domain.Api.Behaviors;
 using Movies.Domain.Api.MIddlewares;
-using Movies.Domain.Commands;
-using Movies.Domain.Commands.CreateMovie;
-using Movies.Domain.Commands.DeleteMovie;
-using Movies.Domain.Commands.UpdateMovie;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Infra.Context;
 using Movies.Domain.Infra.Repositories;
-using Movies.Domain.Queries;
-using Movies.Domain.Queries.GetMovies;
-using Movies.Domain.Queries.GetMoviesById;
 using Movies.Domain.Repositories;
 using Movies.Domain.Services;
 using Keycloak.AuthServices.Authentication;
 using Keycloak.AuthServices.Authorization;
 using Keycloak.AuthServices.Sdk;
+using Movies.Domain.Queries.v1.GetMovies;
+using Movies.Domain.Queries.GetMovies.v1.GetMovies;
+using Movies.Domain.Queries.v1.GetMoviesById;
+using Movies.Domain.Commands.v1.CreateMovie;
+using Movies.Domain.Commands.v1.UpdateMovie;
+using Movies.Domain.Commands.v1.DeleteMovie;
+using Movies.Domain.Commands.UpdateMovie.v1.UpdateMovie;
 
 namespace Movies.Domain.Api.Config;
 

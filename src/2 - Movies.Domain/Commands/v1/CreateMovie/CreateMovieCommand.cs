@@ -1,6 +1,6 @@
 using Movies.Domain.Commands.Contracts;
 
-namespace Movies.Domain.Commands;
+namespace Movies.Domain.Commands.v1.CreateMovie;
 
 public class CreateMovieCommand : ICommand
 {

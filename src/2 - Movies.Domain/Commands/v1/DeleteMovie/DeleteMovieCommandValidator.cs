@@ -1,7 +1,7 @@
 using FluentValidation;
 using Movies.Domain.CrossCutting.Shared;
 
-namespace Movies.Domain.Commands.DeleteMovie;
+namespace Movies.Domain.Commands.v1.DeleteMovie;
 
 public class DeleteMovieCommandValidator : AbstractValidator<DeleteMovieCommand>
 {

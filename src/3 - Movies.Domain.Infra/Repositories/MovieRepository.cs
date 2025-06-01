@@ -42,8 +42,8 @@ public class MovieRepository : IMovieRepository
         return await _context.Movies.Find(m => m.Title == title).FirstOrDefaultAsync();
     }
 
-    public async Task Update(string id, Movie movie)
+    public async Task Update(Movie movie)
     {
-        await _context.Movies.ReplaceOneAsync(m => m.Id == id, movie);
+        await _context.Movies.ReplaceOneAsync(m => m.Id == movie.Id, movie);
     }
 }

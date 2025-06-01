@@ -1,10 +1,10 @@
 using MediatR;
 using Movies.Domain.Entities;
-using Movies.Domain.Queries;
+using Movies.Domain.Queries.v1.GetMovies;
 using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 
-namespace Movies.Domain.Handlers.Queries;
+namespace Movies.Domain.Handlers.Queries.v1.GetMovies;
 public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQueryResult>
 {
     private readonly IMovieRepository _movieRepository;
