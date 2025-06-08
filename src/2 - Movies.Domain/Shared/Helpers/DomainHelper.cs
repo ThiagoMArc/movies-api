@@ -1,6 +1,6 @@
 using MongoDB.Bson;
 
-namespace Movies.Domain.Commands.Helpers;
+namespace Movies.Domain.Shared.Helpers;
 
 public static class DomainHelper
 {

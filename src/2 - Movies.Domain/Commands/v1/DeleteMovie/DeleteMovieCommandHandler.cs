@@ -1,5 +1,5 @@
 using MediatR;
-using Movies.Domain.Commands.Helpers;
+using Movies.Domain.Shared.Helpers;
 using Movies.Domain.Commands.v1.DeleteMovie;
 using Movies.Domain.Entities;
 using Movies.Domain.Repositories;

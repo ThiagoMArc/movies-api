@@ -52,7 +52,7 @@ public static class DependencyInjectionConfig
         var adminClientOptions = builder
                             .Configuration
                             .GetSection(KeycloakAdminClientOptions.Section)
-                            .Get<KeycloakAdminClientOptions>();
+                            .Get<KeycloakAdminClientOptions>() ?? new KeycloakAdminClientOptions();
 
         builder.Services.AddKeycloakAdminHttpClient(adminClientOptions);
     }
