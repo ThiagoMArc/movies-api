@@ -13,11 +13,12 @@ public class DeleteMovieCommandHandlerTests
     private readonly Mock<IMovieRepository> _movieRepository = new(); 
     private readonly Mock<ICache<Movie>> _cacheMock = new();
 
-    [Fact(DisplayName = "DeleteMovieCommandHandler should not be able to dele to delete non existent movie")]
-    public async Task DeleteMovieCommandHandler_Should_Not_Be_Able_To_Delete_Non_Existent_Movie()
+    [InlineData("BFE129D91EA3E7BFA35BC6D1")]
+    [InlineData("XPTO")]
+    [Theory(DisplayName = "DeleteMovieCommandHandler should not be able to dele to delete non existent movie")]
+    public async Task DeleteMovieCommandHandler_Should_Not_Be_Able_To_Delete_Non_Existent_Movie(string id)
     {
         //Arrange
-        string id = "1E195FA36F9B5BD41814FE43";
         DeleteMovieCommand command = new(id);
         _movieRepository.Setup(m => m.GetById(id).Result).Returns((Movie)null);
 

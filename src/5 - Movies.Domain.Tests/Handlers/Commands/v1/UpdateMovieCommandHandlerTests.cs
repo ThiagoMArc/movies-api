@@ -14,12 +14,12 @@ public class UpdateMovieCommandHandlerTests
     private readonly Mock<IMovieRepository> _movieRepository = new();
     private readonly Mock<ICache<Movie>> _cacheMock = new();
 
-    [Fact(DisplayName = "UpdateMovieCommandHandler should not be able to update non registered movie")]
-    public async Task UpdateMovieCommandHandler_Should_Not_Be_Able_To_Update_Non_Registered_Movie()
+    [InlineData("sdfgdfg")]
+    [InlineData("DB5E92267528BB9C59EF423B")]
+    [Theory(DisplayName = "UpdateMovieCommandHandler should not be able to update non registered movie")]
+    public async Task UpdateMovieCommandHandler_Should_Not_Be_Able_To_Update_Non_Registered_Movie(string id)
     {
         //Arrange
-        string id = "DB5E92267528BB9C59EF423B";
-
         UpdateMovieCommand command = new(id,
                                          "Terminator 78",
                                          2078,

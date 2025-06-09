@@ -14,19 +14,19 @@ public class GetMovieByIdQueryHandlerTests
     private readonly Mock<IMovieRepository> _movieRepository = new();
     private readonly Mock<ICache<Movie>> _cacheMock = new();
 
-    [Fact(DisplayName = "GetMovieByIdQueryHandler should not be able to get non existent movie")]
-    public async Task GetMovieByIdQueryHandler_Should_Not_Be_Able_To_Get_Non_Existent_Movie()
+    [InlineData("wrfere566")]
+    [InlineData("BFE129D91EA3E7BFA35BC6D1")]
+    [Theory(DisplayName = "GetMovieByIdQueryHandler should not be able to get non existent movie")]
+    public async Task GetMovieByIdQueryHandler_Should_Not_Be_Able_To_Get_Non_Existent_Movie(string id)
     {
         //Arrange
-        string nonExistentMovieId = "BFE129D91EA3E7BFA35BC6D1";
-
-        GetMovieByIdQuery request = new(nonExistentMovieId);
+        GetMovieByIdQuery request = new(id);
 
         Movie? movie = null;
 
         _cacheMock.Setup(s => s.TryGetValue(It.IsAny<string>(), out movie)).Returns(false);
 
-        _movieRepository.Setup(m => m.GetById(nonExistentMovieId).Result).Returns((Movie)null);
+        _movieRepository.Setup(m => m.GetById(id).Result).Returns((Movie)null);
 
         //Act
         GenericQueryResult result = await new GetMovieByIdQueryHandler(_movieRepository.Object, _cacheMock.Object).Handle(request, CancellationToken.None);
