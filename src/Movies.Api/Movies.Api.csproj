@@ -21,9 +21,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\2 - Movies.Domain\Movies.Domain.csproj" />
-    <ProjectReference Include="..\4 - Movies.Domain.CrossCutting\Movies.Domain.CrossCutting.csproj" />
-    <ProjectReference Include="..\3 - Movies.Domain.Infra\Movies.Domain.Infra.csproj" />
+    <ProjectReference Include="..\Movies.Domain\Movies.Domain.csproj" />
+    <ProjectReference Include="..\Movies.CrossCutting\Movies.CrossCutting.csproj" />
+    <ProjectReference Include="..\Movies.Infra\Movies.Infra.csproj" />
   </ItemGroup>
 
 </Project>
