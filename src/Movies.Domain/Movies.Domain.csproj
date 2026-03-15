@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\4 - Movies.Domain.CrossCutting\Movies.Domain.CrossCutting.csproj" />
+    <ProjectReference Include="..\Movies.CrossCutting\Movies.CrossCutting.csproj" />
   </ItemGroup>
 
 </Project>
