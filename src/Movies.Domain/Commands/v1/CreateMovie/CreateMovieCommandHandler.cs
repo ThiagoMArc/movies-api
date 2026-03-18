@@ -20,7 +20,8 @@ public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, Gen
         if (await MovieAlreadyExists(request.Title))
             return new GenericCommandResult(success: false,
                                             status: System.Net.HttpStatusCode.BadRequest,
-                                           data: $"Movie with given title {request?.Title} is already registered");
+                                            data: null,
+                                            messages: [$"Movie with title: {request?.Title} already exists"]);
 
 
         Movie movie = new(request.Title, request.ReleaseYear,
@@ -29,6 +30,7 @@ public class CreateMovieCommandHandler : IRequestHandler<CreateMovieCommand, Gen
         await _movieRepository.Create(movie);
 
         return new GenericCommandResult(success: true,
+                                        status: System.Net.HttpStatusCode.Created,
                                         data: movie);
     }
 

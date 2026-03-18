@@ -7,9 +7,10 @@ using Movies.Domain.Results;
 using Shouldly;
 
 namespace Movies.Domain.Tests.Handlers.Commands.v1;
+
 public class CreateMovieCommandHandlerTests
 {
-    private readonly Mock<IMovieRepository> _movieRepository = new(); 
+    private readonly Mock<IMovieRepository> _movieRepository = new();
 
     [Fact(DisplayName = "CreateMovieCommandHandler should not be able to register an already registered movie")]
     public async Task CreateMovieCommandHandler_Should_Not_Be_Able_To_Register_An_Already_Regitered_Movie()
@@ -45,7 +46,7 @@ public class CreateMovieCommandHandlerTests
         };
 
         CreateMovieCommand command = new("True Lies", 1994, "James Cameron", "Synopsis", cast);
-        
+
         Movie movie = new("True Lies", 1994, "James Cameron", "Synopsis", cast);
 
         _movieRepository.Setup(m => m.Create(movie)).Returns(Task.CompletedTask);
@@ -55,7 +56,7 @@ public class CreateMovieCommandHandlerTests
 
         //Assert
         result.Success.ShouldBeTrue();
-        result.Status.ShouldBe(System.Net.HttpStatusCode.OK);
+        result.Status.ShouldBe(System.Net.HttpStatusCode.Created);
         result.Data.ShouldNotBeNull();
     }
 }

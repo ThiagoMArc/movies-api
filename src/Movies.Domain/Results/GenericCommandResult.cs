@@ -5,7 +5,10 @@ namespace Movies.Domain.Results;
 
 public class GenericCommandResult : GenericResult, ICommandResult
 {
-    public GenericCommandResult(bool success, HttpStatusCode status = HttpStatusCode.OK, object? data = null): base(success, status, data)
+    public GenericCommandResult(bool success,
+                                HttpStatusCode status = HttpStatusCode.OK,
+                                object? data = null,
+                                IList<string>? messages = null) : base(success, status, data, messages)
     {
-    }   
+    }
 }

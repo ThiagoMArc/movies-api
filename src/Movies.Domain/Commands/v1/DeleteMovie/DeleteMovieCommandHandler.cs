@@ -26,14 +26,16 @@ public class DeleteMovieCommandHandler : IRequestHandler<DeleteMovieCommand, Gen
         if (!DomainHelper.MovieExists(request.Id))
             return new GenericCommandResult(success: false,
                                             status: System.Net.HttpStatusCode.NotFound,
-                                            data: $"Movie with id: {request?.Id} not found");
+                                            data: null,
+                                            messages: [$"Movie with id: {request?.Id} not found"]);
 
         Movie? movie = await _movieRepository.GetById(request.Id);
 
         if (movie is null)
             return new GenericCommandResult(success: false,
                                             status: System.Net.HttpStatusCode.NotFound,
-                                            data: $"Movie with id: {request?.Id} not found");
+                                            data: null,
+                                            messages: [$"Movie with id: {request?.Id} not found"]);
 
         await _movieRepository.Delete(request.Id);
 

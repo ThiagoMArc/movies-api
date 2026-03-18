@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Movies.Domain.Results;
+using System.Net;
 
 namespace Movies.Domain.Api.Controllers;
 
@@ -7,14 +8,14 @@ public class BaseController : ControllerBase
 {
     protected IActionResult GenerateResponse(GenericResult result)
     {
-        return result.Status switch 
+        return result.Status switch
         {
-            System.Net.HttpStatusCode.OK => Ok(result?.Data),
-            System.Net.HttpStatusCode.Created => Created("", result?.Data),
-            System.Net.HttpStatusCode.NoContent => NoContent(),
-            System.Net.HttpStatusCode.BadRequest => BadRequest(result),
-            System.Net.HttpStatusCode.NotFound => NotFound(result),
-            _ => Problem(statusCode: StatusCodes.Status500InternalServerError)
+            HttpStatusCode.OK => Ok(result),
+            HttpStatusCode.Created => Created("", result),
+            HttpStatusCode.NoContent => NoContent(),
+            HttpStatusCode.BadRequest => BadRequest(result),
+            HttpStatusCode.NotFound => NotFound(result),
+            _ => StatusCode(StatusCodes.Status500InternalServerError)
         };
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Caching.StackExchangeRedis;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Movies.Domain.Api.Behaviors;
-using Movies.Domain.Api.MIddlewares;
+using Movies.Domain.Api.Middlewares;
 using Movies.Domain.CrossCutting.Configuration;
 using Movies.Domain.Infra.Context;
 using Movies.Domain.Infra.Repositories;

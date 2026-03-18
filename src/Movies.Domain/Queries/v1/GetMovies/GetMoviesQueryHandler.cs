@@ -5,6 +5,7 @@ using Movies.Domain.Repositories;
 using Movies.Domain.Results;
 
 namespace Movies.Domain.Handlers.Queries.v1.GetMovies;
+
 public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQueryResult>
 {
     private readonly IMovieRepository _movieRepository;
@@ -19,6 +20,7 @@ public class GetMoviesQueryHandler : IRequestHandler<GetMoviesQuery, GenericQuer
         IEnumerable<Movie> movies = await _movieRepository.GetPagedData(request.PageIndex, request.PageSize);
 
         return new GenericQueryResult(success: true,
+                                      status: System.Net.HttpStatusCode.OK,
                                       data: new
                                       {
                                           currentPage = request.PageIndex,

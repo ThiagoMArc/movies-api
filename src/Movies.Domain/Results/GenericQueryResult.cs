@@ -2,9 +2,13 @@ using System.Net;
 using Movies.Domain.Queries.Contracts;
 
 namespace Movies.Domain.Results;
+
 public class GenericQueryResult : GenericResult, IQueryResult
 {
-    public GenericQueryResult(bool success, HttpStatusCode status = HttpStatusCode.OK, object? data = null) : base(success, status, data)
+    public GenericQueryResult(bool success,
+                             HttpStatusCode status = HttpStatusCode.OK,
+                             object? data = null,
+                             IList<string>? messages = null) : base(success, status, data, messages)
     {
     }
 }

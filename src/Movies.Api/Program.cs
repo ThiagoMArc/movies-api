@@ -1,5 +1,5 @@
 using Movies.Domain.Api.Config;
-using Movies.Domain.Api.MIddlewares;
+using Movies.Domain.Api.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
